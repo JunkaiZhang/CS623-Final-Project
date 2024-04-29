@@ -1,0 +1,132 @@
+pip install tabulate
+import psycopg2
+import psycopg2
+from tabulate import tabulate
+print("Beginning")
+con = psycopg2.connect(
+    host="localhost",
+    port=5434,
+    database="postgres",
+    user="postgres",
+    password=123456789)
+print(con)
+import psycopg2
+from psycopg2 import Error
+
+def update_product_id(connection, cursor, p1, pp1):
+    try:
+        # Begin a transaction
+        connection.autocommit = False
+
+        # Update the product ID in the product table
+        update_product_query = """UPDATE product 
+                                  SET prod = %s
+                                  WHERE prod = %s"""
+        cursor.execute(update_product_query, (pp1, p1))
+
+        # Update the product ID in the stock table
+        update_stock_query = """UPDATE stock
+                                SET prod = %s
+                                WHERE prod = %s"""
+        cursor.execute(update_stock_query, (pp1, p1))
+
+        # Commit the transaction
+        connection.commit()
+        print("Product ID updated successfully.")
+
+    except psycopg2.DatabaseError as db_error:
+        # Rollback the transaction if any database error occurs
+        connection.rollback()
+        print("Error occurred. Transaction rolled back:", db_error)
+
+    finally:
+        # Reset autocommit to True and close the cursor
+        connection.autocommit = True
+        cursor.close()
+
+# Example usage
+try:
+    # Establish a connection to the PostgreSQL database
+    connection = psycopg2.connect(user="postgres",
+                                  password="123456789",
+                                  host="localhost",
+                                  port="5434",
+                                  database="postgres")
+
+    cursor = connection.cursor()
+
+    # Specify the old and new product IDs
+    old_prod_id = 'p1'
+    new_prod_id = 'pp1'
+
+    # Call the function to update the product ID
+    update_product_id(connection, cursor, old_prod_id, new_prod_id)
+
+except (Exception, Error) as error:
+    print("Error while connecting to PostgreSQL:", error)
+
+finally:
+    # Close the database connection
+    if connection:
+        connection.close()
+        print("PostgreSQL connection is closed.")
+import psycopg2
+from psycopg2 import Error
+
+def update_depot_name(connection, cursor, d1, dd1):
+    try:
+        # Begin a transaction
+        connection.autocommit = False
+
+        # Update the depot name in the Depot table
+        update_depot_query = """UPDATE Depot
+                                SET dep = %s
+                                WHERE dep = %s"""
+        cursor.execute(update_depot_query, (dd1,d1))
+
+        # Update the depot name in the Stock table
+        update_stock_query = """UPDATE Stock
+                                SET dep = %s
+                                WHERE dep = %s"""
+        cursor.execute(update_stock_query, (dd1,d1))
+
+        # Commit the transaction
+        connection.commit()
+        print("Depot name updated successfully.")
+
+    except psycopg2.DatabaseError as db_error:
+        # Rollback the transaction if any database error occurs
+        connection.rollback()
+        print("Error occurred. Transaction rolled back:", db_error)
+
+    finally:
+        # Reset autocommit to True and close the cursor
+        connection.autocommit = True
+        cursor.close()
+
+# Example usage
+try:
+    # Establish a connection to the PostgreSQL database
+    connection = psycopg2.connect(user="postgres",
+                                  password="123456789",
+                                  host="localhost",
+                                  port="5434",
+                                  database="postgres")
+
+    cursor = connection.cursor()
+
+    # Specify the old and new depot names
+    old_name = 'd1'
+    new_name = 'dd1'
+
+    # Call the function to update the depot name
+    update_depot_name(connection, cursor, old_name, new_name)
+
+except (Exception, Error) as error:
+    print("Error while connecting to PostgreSQL:", error)
+
+finally:
+    # Close the database connection
+    if connection:
+        connection.close()
+        print("PostgreSQL connection is closed.")
